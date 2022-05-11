@@ -1,41 +1,28 @@
-trigger: 'none' # will disable CI builds entirely
-
 pool:
-  vmImage: 'windows-2019'
-    
-variables:
-  BuildConfiguration: release
-  
+  name: Azure Pipelines
+
 steps:
-
-- task: UseDotNet@2
-  displayName: Install .NET 6 sdk
-  inputs:
-    packageType: sdk
-    version: 6.0.x
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-
 - task: DotNetCoreCLI@2
-  displayName: Restore Nuget Packages
+  displayName: Restore
   inputs:
     command: restore
-    projects: '**/WebApp.csproj'
+    projects: '$(Parameters.RestoreBuildProjects)'
 
 - task: DotNetCoreCLI@2
-  displayName: Build Web App
+  displayName: Build
   inputs:
-    projects: '**/WebApp.csproj'
+    projects: '$(Parameters.RestoreBuildProjects)'
     arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: Run Unit Tests
+  displayName: Test
   inputs:
     command: test
-    projects: '**/*UnitTest*.csproj'
+    projects: '$(Parameters.TestProjects)'
     arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: Create Web App Package (.zip)
+  displayName: Publish
   inputs:
     command: publish
     publishWebProjects: True
@@ -43,6 +30,7 @@ steps:
     zipAfterPublish: True
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact (WebApp.zip)'
+  displayName: 'Publish Artifact'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
