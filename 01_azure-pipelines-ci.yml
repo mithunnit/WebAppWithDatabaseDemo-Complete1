@@ -12,6 +12,7 @@ steps:
   displayName: Build
   inputs:
     projects: '**/*.csproj'
+              '!**/*SeleniumUiTests.csproj'
     arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
