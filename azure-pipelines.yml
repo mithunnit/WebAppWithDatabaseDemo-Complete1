@@ -6,6 +6,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  Build.ArtifactStagingDirectory: 'c:\agent_work\1\a'
 
 steps:
 - task: UseDotNet@2
