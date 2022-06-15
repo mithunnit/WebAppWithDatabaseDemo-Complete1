@@ -12,7 +12,7 @@ steps:
   displayName: 'Use .NET Core sdk'
   inputs:
     packageType: 'sdk'
-    version: '6.0.203'
+    version: '3.1.100'
 - task: DotNetCoreCLI@2
   displayName: Restore-Nuget-Packages
   inputs:
@@ -35,7 +35,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '--configuration -$(buildConfiguration) --output -"$(build.ArtifactStagingDirectory)"'
+    arguments: '--configuration -$(buildConfiguration) --output -$(build.ArtifactStagingDirectory)'
     zipAfterPublish: True
 - task: PublishBuildArtifacts@1
   displayName: 'Publish-Artifact.(WebApp.zip)'
