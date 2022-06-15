@@ -2,7 +2,7 @@ trigger:
 - none
 
 pool:
-  vmImage: windows-2019
+  vmImage: vs2017-win2016
 
 variables:
   buildConfiguration: 'Release'
@@ -32,12 +32,11 @@ steps:
     projects: '**/WebApp.UnitTest.csproj'
     arguments: '--configuration -$(buildConfiguration)'
 - task: DotNetCoreCLI@2
-  displayName: Create-Web-App-Package 
+  displayName: Publish
   inputs:
-    command: 'publish'
-    publishWebProjects: true
-    projects: '**/WebApp.csproj'
-    arguments: '--configuration -$(BuildConfiguration) --output -$(Build.ArtifactStagingDirectory)'
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
     zipAfterPublish: True
 - task: PublishBuildArtifacts@1
   displayName: 'Publish-Artifact.(WebApp.zip)'
