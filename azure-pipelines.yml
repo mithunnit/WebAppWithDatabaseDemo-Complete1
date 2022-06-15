@@ -31,7 +31,7 @@ steps:
     projects: '**/WebApp.UnitTest.csproj'
     arguments: '--configuration -$(buildConfiguration)'
 - task: DotNetCoreCLI@2
-  displayName: Create-Web-App-Package.(.zip)
+  displayName: Create-Web-App-Package 
   inputs:
     command: 'publish'
     publishWebProjects: true
