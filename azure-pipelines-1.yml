@@ -1,6 +1,5 @@
 trigger: none
 
-Jobs:
 - job: Webapp
   displayName: 'Build Web App'
 pool:
