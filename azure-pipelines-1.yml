@@ -24,7 +24,7 @@ steps:
     SonarCloud: 'SonarCloud'
     organization: 'mithunnit'
     scannerMode: 'MSBuild'
-    projectKey: 'WebAppWithDatabaseDemo'
+    projectKey: 'WebAppWithDatabaseDemo-Complete'
 - task: DotNetCoreCLI@2
   displayName: Build-Web-App
   inputs:
