@@ -60,7 +60,6 @@ steps:
   pool:
     vmImage: 'windows-2019'
 
-steps:
 - task: MSBuild@1
   displayName: 'Build solution WebApp.Database.sqlproj'
   inputs:
