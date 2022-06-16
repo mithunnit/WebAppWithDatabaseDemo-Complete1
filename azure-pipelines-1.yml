@@ -1,9 +1,10 @@
-trigger:
-- none
+trigger: none
 
+Jobs:
+- job: Webapp
+  displayName: 'Build Web App'
 pool:
   vmImage: windows-2019
-
 variables:
   buildConfiguration: 'Release'
   
@@ -53,6 +54,24 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
+
+- job: Database
+  displayName: 'Build Database'
+  pool:
+    vmImage: 'windows-2019'
+
+steps:
+- task: MSBuild@1
+  displayName: 'Build solution WebApp.Database.sqlproj'
+  inputs:
+    solution: 'WebApp.Database/WebApp.Database.sqlproj'
+    msbuildArguments: '/p:OutDir=$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact (Dacpac)'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'dacpac'
+
 
 
     
