@@ -118,8 +118,9 @@ jobs:
   
   steps:
   - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: ARM templates'
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      PathtoPublish: AzureResourceGroupDeployment
       ArtifactName: 'arm'
       
 
