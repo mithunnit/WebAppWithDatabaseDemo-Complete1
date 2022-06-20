@@ -1,5 +1,18 @@
-trigger: 'none'
+trigger: 
+ branches:
+  include:
+    - master
+ paths:
+   exclude:
+     - docs/*
+     - Terraform/*
 
+parameters:
+  - name: runcompletepipeline
+    displayName: Run all tasks ?
+    type: boolean
+    default: true
+   
 jobs:
 - job: Webapp
   displayName: 'Build Web App'
