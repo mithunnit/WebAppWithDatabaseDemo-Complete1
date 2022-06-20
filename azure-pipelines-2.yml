@@ -146,16 +146,34 @@ jobs:
   variables: 
     azureSubscription: 'Pay-As-You-Go (0da7ae55-f78b-410c-90fb-cef156b34a60)' 
     ResourceGroupName: 'VisualStudioOnline-0FF03BC89D6343EF8883DC94CAFE9CFD'
-    Database.Admin: 'houssem'
-    Database.Password: '@Aa123456' # to be secured in Key Vault
+    Database.Admin: 'mithunnit'
+    Database.Password: 'M!thun@150' # to be secured in Key Vault
     Database.Name: 'EmployeesDB'
-    WebAppName: '$(Prefix)-$(Release.EnvironmentName)-$(UniqueId)'
+    WebAppName: 'mithun-webapp'
     WebAppNameUrl: 'https://$(WebAppName).azurewebsites.net/'
-    SqlServerName: '$(Prefix)-sql-$(Release.EnvironmentName)-$(UniqueId)'
+    SqlServerName: 'mithun-sql'
     Prefix: 'tunis'
     Release.EnvironmentName: 'dev'
     UniqueId: '1280' #'$(Build.BuildId)'
-    hostingPlanName: '$(Prefix)-service-plan'
+    hostingPlanName: 'mithun-service-plan'
+  
+jobs:
+- job: Create_DEV
+  displayName: Create DEV
+  pool:
+    vmImage: 'windows-2019'
+  
+  steps:
+    
+   - checkout: none
+   - task: DownloadBuildArtifacts@1
+     displayName: Download ARM templates
+     inputs:
+       artifactName: 'arm'
+       downloadPath: $(System.DefaultWorkingDirectory)
+  
+    
+    
     
  
     
