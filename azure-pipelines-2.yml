@@ -12,6 +12,10 @@ parameters:
     displayName: Run all tasks ?
     type: boolean
     default: true
+
+stages:
+  stage: Build_Stage
+  displayName: Build Apps
    
 jobs:
 - job: Webapp
@@ -135,6 +139,27 @@ jobs:
     inputs:
       PathtoPublish: AzureResourceGroupDeployment
       ArtifactName: 'arm'
+
+  stage: Dev_Stage
+  displayName: Create & Deploy to Dev
+  dependsOn: Build_Stage
+  variables: 
+    azureSubscription: 'Pay-As-You-Go (0da7ae55-f78b-410c-90fb-cef156b34a60)' 
+    ResourceGroupName: 'VisualStudioOnline-0FF03BC89D6343EF8883DC94CAFE9CFD'
+    Database.Admin: 'houssem'
+    Database.Password: '@Aa123456' # to be secured in Key Vault
+    Database.Name: 'EmployeesDB'
+    WebAppName: '$(Prefix)-$(Release.EnvironmentName)-$(UniqueId)'
+    WebAppNameUrl: 'https://$(WebAppName).azurewebsites.net/'
+    SqlServerName: '$(Prefix)-sql-$(Release.EnvironmentName)-$(UniqueId)'
+    Prefix: 'tunis'
+    Release.EnvironmentName: 'dev'
+    UniqueId: '1280' #'$(Build.BuildId)'
+    hostingPlanName: '$(Prefix)-service-plan'
+    
+ 
+    
+
       
 
     
