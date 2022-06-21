@@ -262,7 +262,7 @@ stages:
         inputs:
           buildType: 'current'
           downloadType: 'single'
-          artifactName: 'ui-tests'
+          artifactName: 'UI-Test'
           itemPattern: ''
           downloadPath: '$(System.DefaultWorkingDirectory)'
     
