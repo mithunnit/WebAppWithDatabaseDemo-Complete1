@@ -229,7 +229,32 @@ jobs:
         TakeAppOfflineFlag: true
         JSONFiles: '**/appsettings.json'
       
+    - task: DownloadBuildArtifacts@1
+      displayName: Download DacPac
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'dacpac'
+        itemPattern: '**/*.dacpac'
+        downloadPath: '$(System.DefaultWorkingDirectory)'
       
+    - task: SqlAzureDacpacDeployment@1
+      displayName: Deploy DacPac to SQL Azure
+      inputs:
+        azureSubscription: 'Pay-As-You-Go (0da7ae55-f78b-410c-90fb-cef156b34a60)'
+        AuthenticationType: 'server'
+        ServerName: '$(SqlServerName).database.windows.net,1433'
+        DatabaseName: '$(Database.Name)'
+        SqlUsername: '$(Database.Admin)'
+        SqlPassword: '$(Database.Password)'
+        deployType: 'DacpacTask'
+        DeploymentAction: 'Publish'
+        DacpacFile: '$(System.DefaultWorkingDirectory)/dacpac/WebApp.Database.dacpac'
+        IpDetectionMethod: 'AutoDetect'
+      
+       
+      
+       
       
   
 
