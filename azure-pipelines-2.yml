@@ -274,7 +274,7 @@ stages:
            **\*Test*.dll
            !**\*TestAdapter.dll
            !**\obj\**
-          searchFolder: '$(System.DefaultWorkingDirectory)/ui-tests'
+          searchFolder: '$(System.DefaultWorkingDirectory)/UI-Test'
           codeCoverageEnabled: true
       
       
