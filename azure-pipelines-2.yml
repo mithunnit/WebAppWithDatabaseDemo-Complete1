@@ -270,11 +270,14 @@ stages:
         displayName: Run Selenium UI Tests
         inputs:
           testSelector: 'testAssemblies'
+          searchFolder: '$(System.DefaultWorkingDirectory)/UI-Test'
+          runSettingsFile: '$(System.DefaultWorkingDirectory)/ui-tests/.runsettings'
+          overrideTestrunParameters: '-webAppUrl $(WebAppNameUrl)'
           testAssemblyVer2: |
            **\*Test*.dll
            !**\*TestAdapter.dll
            !**\obj\**
-          searchFolder: '$(System.DefaultWorkingDirectory)/UI-Test'
+          runInParallel: false
           codeCoverageEnabled: true
       
       
