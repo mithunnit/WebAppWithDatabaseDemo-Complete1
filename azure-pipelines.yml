@@ -27,7 +27,7 @@ stages:
         displayName: 'publish artifacts to drop folder'
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'drop'
+          ArtifactName: 'arm'
 
   - stage: Deploy_Stage
     dependsOn: 'Build_Stage'
@@ -40,5 +40,26 @@ stages:
       variables:
         buildConfiguration: 'Release'
       steps: 
-
       
+      - task: DownloadBuildArtifacts@1
+        displayName: 'download artifacts'
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'arm'
+          downloadPath: '$(System.ArtifactsDirectory)'
+
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: 'Deploy resources to Azure'
+        inputs:
+          deploymentScope: 'Resource Group'
+          azureResourceManagerConnection: 'Pay-As-You-Go(0da7ae55-f78b-410c-90fb-cef156b34a60)'
+          subscriptionId: '0da7ae55-f78b-410c-90fb-cef156b34a60'
+          action: 'Create Or Update Resource Group'
+          resourceGroupName: 'VisualStudioOnline-0FF03BC89D6343EF8883DC94CAFE9CFD'
+          location: 'East US'
+          templateLocation: 'Linked artifact'
+          csmFile: '$(System.ArtifactsDirectory)/arm/WebSiteSQLDatabase.json'
+          csmParametersFile: '$(System.ArtifactsDirectory)/arm/WebSiteSQLDatabase.parameters.json'
+          overrideParameters: '-hostingPlanName "mithun-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin "mithunnit" -administratorLoginPassword "@Aa123456" -databaseName "EmployeesDB" -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName "mithunnit-webapp" -sqlserverName "mithunnit-sql"'
+          deploymentMode: 'Complete'
