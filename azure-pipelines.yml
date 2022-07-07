@@ -88,6 +88,14 @@ stages:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
           ArtifactName: 'arm'
 
+    - job: SonarCloud
+      displayName: 'SonarCloud analysis'
+      pool: 
+        vmImage: 'windows-2019'
+      steps:
+
+      
+
   - stage: Deploy_Stage
     dependsOn: 'Build_Stage'
     displayName: :'Deploy ARM templates to Azure'
