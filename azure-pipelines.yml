@@ -52,7 +52,23 @@ stages:
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
           ArtifactName: 'drop'
-            
+    
+    - job: BuildDB
+      displayName: 'Build Database Job'
+      pool: 
+        vmImage: 'windows-2019'
+      steps:
+
+      - task: MSBuild@1
+        inputs:
+          solution: 'WebApp.Database/WebApp.Database.sqlproj'
+          msbuildArguments: '/p:OutDir=$(Build.ArtifactStagingDirectory)'
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'dacpac'
+          
     - job: ARMfilecreation
       displayName: 'ARM file creation'
       pool: 
