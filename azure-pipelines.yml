@@ -31,7 +31,7 @@ stages:
     dependsOn: 'Build_Stage'
     displayName: :'Deploy ARM templates to Azure'
     jobs:
-    - job: ARM-file-deploy
+    - job: ARMfiledeploy
       displayName: 'ARM file deploy to Azure'
       pool: 
         vmImage: 'windows-2019'
