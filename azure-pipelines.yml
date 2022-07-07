@@ -46,7 +46,7 @@ stages:
           downloadPath: '$(System.ArtifactsDirectory)'
 
       - task: AzureResourceManagerTemplateDeployment@3
-        displayName: 'Deploy resources to Azure'
+        displayName: 'Validate Azure resources'
         inputs:
           deploymentScope: 'Resource Group'
           azureResourceManagerConnection: 'Pay-As-You-Go(0da7ae55-f78b-410c-90fb-cef156b34a60)'
@@ -58,4 +58,4 @@ stages:
           csmFile: '$(System.ArtifactsDirectory)/arm/WebSiteSQLDatabase.json'
           csmParametersFile: '$(System.ArtifactsDirectory)/arm/WebSiteSQLDatabase.parameters.json'
           overrideParameters: '-hostingPlanName "mithun-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin "mithunnit" -administratorLoginPassword "@Aa123456" -databaseName "EmployeesDB" -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName "mithunnit-webapp" -sqlserverName "mithunnit-sql"'
-          deploymentMode: 'Complete'
+          deploymentMode: 'Validation'
