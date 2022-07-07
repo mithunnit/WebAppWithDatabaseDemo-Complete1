@@ -12,8 +12,6 @@ stages:
       displayName: 'ARM file creation'
       pool: 
         vmImage: 'windows-2019'
-      variables:
-        buildConfiguration: 'Release'
       steps:
 
       - task: CopyFiles@2
@@ -37,8 +35,6 @@ stages:
       displayName: 'ARM file deploy to Azure'
       pool: 
         vmImage: 'windows-2019'
-      variables:
-        buildConfiguration: 'Release'
       steps: 
       
       - task: DownloadBuildArtifacts@1
