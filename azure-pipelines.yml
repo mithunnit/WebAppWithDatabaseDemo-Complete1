@@ -62,6 +62,7 @@ stages:
       - task: MSBuild@1
         inputs:
           solution: 'WebApp.Database/WebApp.Database.sqlproj'
+          msbuildVersion: '15.0'
           msbuildArguments: '/p:OutDir=$(Build.ArtifactStagingDirectory)'
       
       - task: SonarCloudPrepare@1
