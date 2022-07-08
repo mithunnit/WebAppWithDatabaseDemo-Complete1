@@ -62,17 +62,16 @@ stages:
       - task: MSBuild@1
         inputs:
           solution: 'WebApp.Database/WebApp.Database.sqlproj'
-          msbuildVersion: '14.0.25420.1'
+          msbuildVersion: 'latest'
           msbuildArguments: '/p:OutDir=$(Build.ArtifactStagingDirectory)'
         
       - task: SonarCloudPrepare@1
         inputs:
           SonarCloud: 'SonarCloud'
           organization: 'mithunnit'
-          scannerMode: 'MSBuild'
-          projectKey: 'mithunnit_WebAppWithDatabaseDemo-Complete'
-          projectName: 'WebAppWithDatabaseDemo-Complete'
-        
+          scannerMode: 'CLI'
+          configMode: 'file'
+          
       - task: SonarCloudAnalyze@1
         displayName: 'Run Code Analysis'
 
