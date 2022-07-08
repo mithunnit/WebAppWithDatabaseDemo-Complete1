@@ -59,6 +59,11 @@ stages:
         vmImage: 'windows-2019'
       steps:
 
+      - task: MSBuild@1
+        inputs:
+          solution: 'WebApp.Database/WebApp.Database.sqlproj'
+          msbuildArguments: '/p:OutDir=$(Build.ArtifactStagingDirectory)'
+      
       - task: SonarCloudPrepare@1
         inputs:
           SonarCloud: 'SonarCloud'
@@ -66,11 +71,13 @@ stages:
           scannerMode: 'MSBuild'
           projectKey: 'mithunnit_WebAppWithDatabaseDemo-Complete'
           projectName: 'WebAppWithDatabaseDemo-Complete'
+        
+      - task: SonarCloudAnalyze@1
+        displayName: 'Run Code Analysis'
 
-      - task: MSBuild@1
+      - task: SonarCloudPublish@1
         inputs:
-          solution: 'WebApp.Database/WebApp.Database.sqlproj'
-          msbuildArguments: '/p:OutDir=$(Build.ArtifactStagingDirectory)'
+          pollingTimeoutSec: '300'
 
       - task: PublishBuildArtifacts@1
         inputs:
@@ -101,13 +108,6 @@ stages:
       pool: 
         vmImage: 'windows-2019'
       steps: 
-
-      - task: SonarCloudAnalyze@1
-        displayName: 'Run Code Analysis'
-
-      - task: SonarCloudPublish@1
-        inputs:
-          pollingTimeoutSec: '300'
     
   - stage: Deploy_Stage
     dependsOn: 'Build_Stage'
