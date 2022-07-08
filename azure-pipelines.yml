@@ -65,21 +65,6 @@ stages:
           msbuildVersion: 'latest'
           msbuildArguments: '/p:OutDir=$(Build.ArtifactStagingDirectory)'
         
-      - task: SonarCloudPrepare@1
-        inputs:
-          SonarCloud: 'SonarCloud'
-          organization: 'mithunnit'
-          scannerMode: 'CLI'
-          projectKey: 'mithunnit_WebAppWithDatabaseDemo-Complete'
-          configMode: 'file'
-          
-      - task: SonarCloudAnalyze@1
-        displayName: 'Run Code Analysis'
-
-      - task: SonarCloudPublish@1
-        inputs:
-          pollingTimeoutSec: '300'
-
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
