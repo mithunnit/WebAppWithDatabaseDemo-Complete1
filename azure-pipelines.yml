@@ -159,7 +159,7 @@ stages:
           azureSubscription: 'Pay-As-You-Go(0da7ae55-f78b-410c-90fb-cef156b34a60)'
           appType: 'webAppLinux'
           WebAppName: 'mithun-webapp'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/arm/WebApp.zip'
 
       - task: DownloadBuildArtifacts@1
         displayName: 'dowdnload dacpac file'
@@ -181,7 +181,7 @@ stages:
           SqlPassword: '@Aa123456'
           deployType: 'DacpacTask'
           DeploymentAction: 'Publish'
-          DacpacFile: '$(System.DefaultWorkingDirectory)/dacpac/*.dacpac'
+          DacpacFile: '$(System.DefaultWorkingDirectory)/dacpac/WebApp.Database.dacpac'
           IpDetectionMethod: 'AutoDetect'
         
        
