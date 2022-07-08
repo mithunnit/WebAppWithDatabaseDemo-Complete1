@@ -93,8 +93,8 @@ stages:
     dependsOn: 'Build_Stage'
     displayName: :'Deploy ARM templates to Azure'
     jobs:
-    - job: ARMfiledeploy
-      displayName: 'ARM file deploy to Azure'
+    - job: CreateDev
+      displayName: 'Create resources in Azure'
       pool: 
         vmImage: 'windows-2019'
       steps: 
@@ -121,3 +121,69 @@ stages:
           csmParametersFile: '$(System.ArtifactsDirectory)/arm/WebSiteSQLDatabase.parameters.json'
           overrideParameters: '-hostingPlanName "mithun-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin "mithunnit" -administratorLoginPassword "@Aa123456" -databaseName "EmployeesDB" -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName "mithunnit-webapp" -sqlserverName "mithunnit-sql"'
           deploymentMode: 'Validation'
+
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: 'Validate Azure resources'
+        inputs:
+          deploymentScope: 'Resource Group'
+          azureResourceManagerConnection: 'Pay-As-You-Go(0da7ae55-f78b-410c-90fb-cef156b34a60)'
+          subscriptionId: '0da7ae55-f78b-410c-90fb-cef156b34a60'
+          action: 'Create Or Update Resource Group'
+          resourceGroupName: 'VisualStudioOnline-0FF03BC89D6343EF8883DC94CAFE9CFD'
+          location: 'East US'
+          templateLocation: 'Linked artifact'
+          csmFile: '$(System.ArtifactsDirectory)/arm/WebSiteSQLDatabase.json'
+          csmParametersFile: '$(System.ArtifactsDirectory)/arm/WebSiteSQLDatabase.parameters.json'
+          overrideParameters: '-hostingPlanName "mithun-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin "mithunnit" -administratorLoginPassword "@Aa123456" -databaseName "EmployeesDB" -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName "mithunnit-webapp" -sqlserverName "mithunnit-sql"'
+          deploymentMode: 'Complete'
+
+    - job: DeployDev
+      displayName: 'Deploy apps to Azure'
+      pool: 
+        vmImage: 'windows-2019'
+      steps:
+
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'arm'
+          itemPattern: '**/WebApp.zip'
+          downloadPath: '$(System.DefaultWorkingDirectory)'
+        
+      - task: AzureRmWebAppDeployment@4
+        displayName: 'Deploy WebApp to Azure' 
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Pay-As-You-Go(0da7ae55-f78b-410c-90fb-cef156b34a60)'
+          appType: 'webAppLinux'
+          WebAppName: 'mithun-webapp'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+      - task: DownloadBuildArtifacts@1
+        displayName: 'dowdnload dacpac file'
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'dacpac'
+          itemPattern: '**/*.dacpac'
+          downloadPath: '$(System.DefaultWorkingDirectory)'
+
+      - task: SqlAzureDacpacDeployment@1
+        displayName: 'Deploy dacpac file to Azure' 
+        inputs:
+          azureSubscription: 'Pay-As-You-Go(0da7ae55-f78b-410c-90fb-cef156b34a60)'
+          AuthenticationType: 'server'
+          ServerName: 'mithunnit-sql.database.windows.net'
+          DatabaseName: 'EmployeesDB'
+          SqlUsername: 'mithunnit'
+          SqlPassword: '@Aa123456'
+          deployType: 'DacpacTask'
+          DeploymentAction: 'Publish'
+          DacpacFile: '$(System.DefaultWorkingDirectory)/dacpac/*.dacpac'
+          IpDetectionMethod: 'AutoDetect'
+        
+       
+      
+
+
