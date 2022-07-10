@@ -1,0 +1,56 @@
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Build_Stage
+    displayName: :Build stage
+    jobs:
+    - job: WebApp
+      displayName: 'Build WebApp'
+      pool: 
+        vmImage: 'windows-2019'
+      steps:
+       
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '6.0.101'
+      
+      - task: DotNetCoreCLI@2
+        displayName: 'Restore nuget packages'
+        inputs:
+          command: 'restore'
+          projects: |
+            **/*.csproj
+            !**/*Tests.csproj
+      
+      - task: DotNetCoreCLI@2
+        displayName: 'Build artifact'
+        inputs:
+          command: 'build'
+          projects: |
+            **/*.csproj
+            !**/*SeleniumUiTests.csproj
+          arguments: '--configuration $(BuildConfiguration)'
+
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: '**/*UnitTest.csproj'
+          arguments: '--configuration $(BuildConfiguration)'
+
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: true
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+    
+    
