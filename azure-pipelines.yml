@@ -158,8 +158,8 @@ stages:
         inputs:
           ConnectionType: 'AzureRM'
           azureSubscription: 'Pay-As-You-Go(0da7ae55-f78b-410c-90fb-cef156b34a60)'
-          appType: 'webAppLinux'
-          WebAppName: 'mithun-webapp'
+          appType: 'webApp'
+          WebAppName: 'mithunnit-webapp'
           packageForLinux: '$(System.DefaultWorkingDirectory)/drop/WebApp.zip'
 
       - task: DownloadBuildArtifacts@1
