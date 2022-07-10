@@ -32,7 +32,7 @@ stages:
           SonarCloud: 'SonarCloud-test'
           organization: 'mithunnit-1'
           scannerMode: 'MSBuild'
-          projectKey: 'mithunnit-1'
+          projectKey: 'mithunnit_ARM-Template-YAML'
           projectName: 'ARM-Template-YAML'
       
       - task: DotNetCoreCLI@2
@@ -43,6 +43,12 @@ stages:
             **/*.csproj
             !**/*SeleniumUiTests.csproj
           arguments: '--configuration $(BuildConfiguration)'
+
+      - task: SonarCloudAnalyze@1
+    
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
 
       - task: DotNetCoreCLI@2
         inputs:
