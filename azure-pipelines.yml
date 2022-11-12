@@ -2,7 +2,7 @@ trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 variables:
   solution: '**/*.sln'
@@ -23,6 +23,20 @@ steps:
           projects: |
             **/*.csproj
             !**/*Tests.csproj
+      
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'SonarCloud'
+          organization: 'mithunnit-1'
+          scannerMode: 'MSBuild'
+          projectKey: 'mithunnit-1'
+          projectName: 'mithunnit-1'
+      
+      - task: SonarCloudAnalyze@1
+
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
       
       - task: DotNetCoreCLI@2
         displayName: 'Build artifact'
