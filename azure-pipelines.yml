@@ -2,6 +2,7 @@ trigger:
 - none
 
 pool:
+<<<<<<< HEAD
   vmImage: ubuntu-latest
 
 stages:
@@ -203,3 +204,50 @@ stages:
       
 
 
+=======
+  vmImage: vs2017-win2016
+
+variables:
+  buildConfiguration: 'Release'
+  Build.ArtifactStagingDirectory: 'c:\agent_work\1\a'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.100'
+- task: DotNetCoreCLI@2
+  displayName: Restore-Nuget-Packages
+  inputs:
+    command: 'restore'
+    projects: '**/WebApp.csproj'
+- task: DotNetCoreCLI@2
+  displayName: Build-Web-App
+  inputs:
+    command: 'build'
+    projects: '**/WebApp.csproj'
+    arguments: '--configuration -$(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: Run-Unit-Tests
+  inputs:
+    command: 'test'
+    projects: '**/WebApp.UnitTest.csproj'
+    arguments: '--configuration -$(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: Publish
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+    zipAfterPublish: True
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish-Artifact.(WebApp.zip)'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+
+
+    
+   
+>>>>>>> 40c83561318f532283b94e78522c8f7e52671ac0
