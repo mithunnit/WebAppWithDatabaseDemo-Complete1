@@ -18,6 +18,11 @@ steps:
           scannerMode: 'MSBuild'
           projectKey: 'mithunnit-1'
           projectName: 'mithunnit-1'
+    
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '6.0.101'
       
       - task: NuGetToolInstaller@1
 
